@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		178BDE1B1B43EF2C00C89D8A /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178BDE1A1B43EF2C00C89D8A /* SwiftyJSON.swift */; };
 		9ABAA0991B36936800C54D21 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABAA0981B36936800C54D21 /* AppDelegate.swift */; };
 		9ABAA09B1B36936800C54D21 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABAA09A1B36936800C54D21 /* ViewController.swift */; };
 		9ABAA09E1B36936800C54D21 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9ABAA09C1B36936800C54D21 /* Main.storyboard */; };
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		178BDE1A1B43EF2C00C89D8A /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftyJSON.swift; path = "../../SwiftyJSON-master/Source/SwiftyJSON.swift"; sourceTree = "<group>"; };
 		9ABAA0931B36936800C54D21 /* mapview.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mapview.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9ABAA0971B36936800C54D21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9ABAA0981B36936800C54D21 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 			children = (
 				9ABAA0981B36936800C54D21 /* AppDelegate.swift */,
 				9ABAA09A1B36936800C54D21 /* ViewController.swift */,
+				178BDE1A1B43EF2C00C89D8A /* SwiftyJSON.swift */,
 				9ABAA09C1B36936800C54D21 /* Main.storyboard */,
 				9ABAA09F1B36936800C54D21 /* Images.xcassets */,
 				9ABAA0A11B36936800C54D21 /* LaunchScreen.xib */,
@@ -220,6 +223,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				178BDE1B1B43EF2C00C89D8A /* SwiftyJSON.swift in Sources */,
 				9ABAA09B1B36936800C54D21 /* ViewController.swift in Sources */,
 				9ABAA0991B36936800C54D21 /* AppDelegate.swift in Sources */,
 			);
@@ -417,6 +421,7 @@
 				9ABAA0B41B36936800C54D21 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9ABAA0B51B36936800C54D21 /* Build configuration list for PBXNativeTarget "mapviewTests" */ = {
 			isa = XCConfigurationList;
@@ -425,6 +430,7 @@
 				9ABAA0B71B36936800C54D21 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  mapview
 //
-//  Created by 有村 琢磨 on 2015/06/21.
-//  Copyright (c) 2015年 有村 琢磨. All rights reserved.
+//  Created by 前田 雄亮 on 2015/06/21.
+//  Copyright (c) 2015年 前田 雄亮. All rights reserved.
 //
 
 import UIKit
@@ -14,6 +14,10 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     
     var myMapView: MKMapView!
     var myLocationManager: CLLocationManager!
+    
+    var hotpepperLongitude: Double!
+    var hotpepperLatitude: Double!
+    var shopName: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,8 +44,8 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         self.view.addSubview(myMapView)
         
         // 中心点の緯度経度.
-        let myLat: CLLocationDegrees = 37.506804
-        let myLon: CLLocationDegrees = 139.930531
+        let myLat: CLLocationDegrees = 34.6983328
+        let myLon: CLLocationDegrees = 135.4907778
         let myCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2DMake(myLat, myLon) as CLLocationCoordinate2D
         
         // 縮尺.
@@ -58,21 +62,24 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         var myPin: MKPointAnnotation = MKPointAnnotation()
         
         // 経度、緯度.
-        let myLatitude: CLLocationDegrees = 37.331741
-        let myLongitude: CLLocationDegrees = -122.030333
+        let myLatitude: CLLocationDegrees = 34.6983328
+        let myLongitude: CLLocationDegrees = 135.4907778
         
         // 座標を設定.
         let center: CLLocationCoordinate2D = CLLocationCoordinate2DMake(myLatitude, myLongitude)
         myPin.coordinate = center
         
         // タイトルを設定.
-        myPin.title = "タイトル"
+        myPin.title = "なう"
         
         // サブタイトルを設定.
-        myPin.subtitle = "サブタイトル"
+        myPin.subtitle = "お腹すいた"
+        
         
         // MapViewにピンを追加.
         myMapView.addAnnotation(myPin)
+        
+        getDate()
         
     }
     
@@ -82,7 +89,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
         let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
-    
+        
         
         self.myMapView.setRegion(region, animated: true)
     }
@@ -109,19 +116,84 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             println("etc.")
         }
     }
-}
     
-    // use NSURLSession
-    var url: NSURL = NSURL(string:"http://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=7a07e3ec42b914d4&format=json&lat=35.6800079345703&lng=139.768936157227")!
-    var myRequest = NSMutableURLRequest(URL: url)
-    myRequest.HTTPMethod = "GET"
-    var task = NSURLSession.sharedSession().dataTaskWithRequest(myRequest, completionHandler: { data, response, error in
-        if (error == nil) {
-            //正常終了、レスポンスはdataに
-            println(NSString(data:data, encoding:NSUTF8StringEncoding))
-        } else {
-        println(error)
+    //APIデータの取得処理
+    
+    func getDate(){
+        println("取得なう")
+        // use NSURLSession
+        var url: NSURL = NSURL(string:"http://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=7a07e3ec42b914d4&format=json&lat=35.6800079345703&lng=139.768936157227")!
+        var myRequest = NSMutableURLRequest(URL: url)
+        myRequest.HTTPMethod = "GET"
+        /*
+        var task = NSURLSession.sharedSession().dataTaskWithRequest(myRequest, completionHandler: { data, response, error in
+            if (error == nil) {
+                //正常終了、レスポンスはdataに
+                println(NSString(data:data, encoding:NSUTF8StringEncoding))
+            } else {
+                println(error)
+            }
+        })
+        task.resume()
+        */
+        let connection :NSURLConnection = NSURLConnection(request: myRequest, delegate: self, startImmediately: false)!
+        
+        NSURLConnection.sendAsynchronousRequest(myRequest, queue: NSOperationQueue.mainQueue(), completionHandler: response)
+    }
+    
+    
+    // 取得したAPIデータの処理
+    func response(res: NSURLResponse!, data: NSData!, error: NSError!){
+        /*
+        let json:NSDictionary = NSJSONSerialization.JSONObjectWithData(data,
+        options: NSJSONReadingOptions.AllowFragments, error: nil) as! NSDictionary
+        //let tourspots:NSDictionary = json.objectForKey("tourspots") as! NSDictionary
+        let names:NSDictionary = json.objectForKey("[tourspots]") as! NSDictionary
+        let name1:NSArray = names.objectForKey("name.written") as! NSArray
+        */
+        
+        
+        
+        let json = JSON(data: data)
+        for i in 0...5 {
+            if let stringdata = json["results"]["shop"][i]["name"].string{
+                shopName = stringdata
+                NSLog(stringdata)
+            }
+            
+            
+            if var longitude : String = json["results"]["shop"][i]["lng"].string, var latitude : String = json["results"]["shop"][i]["lat"].string {
+            hotpepperLatitude = atof(latitude)
+            hotpepperLongitude = atof(longitude)
+            println("経度\(longitude), 緯度\(latitude)")
+            
+            }
+        
+            makeTourspotsPins(hotpepperLatitude!,longitude: hotpepperLongitude!)
         }
-    })
-    task.resume()
+        
+        
+    }
+    
+    
+    //mapにピンを立てる
+    func makeTourspotsPins(latitude:Double, longitude:Double){
+        
+        var hotpepperPin :MKPointAnnotation = MKPointAnnotation()
+        let pinLongitude :CLLocationDegrees = longitude
+        let pinLatitude :CLLocationDegrees = latitude 
+        
+        let coordinate :CLLocationCoordinate2D = CLLocationCoordinate2DMake(pinLatitude, pinLongitude) //let
+        
+        hotpepperPin.coordinate = coordinate
+        //hotpepperPin.title = hotpepperName
+        hotpepperPin.title = shopName
+            myMapView.addAnnotation(hotpepperPin)
+        
+        
+    }
+    
+
+}
+
 
